@@ -1,0 +1,64 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* getIntersectionNode(struct Node* head1, struct Node* head2) {
+    if (head1 == NULL || head2 == NULL) return NULL;
+
+    struct Node* p1 = head1;
+    struct Node* p2 = head2;
+
+    while (p1 != p2) {
+        p1 = (p1 == NULL) ? head2 : p1->next;
+        p2 = (p2 == NULL) ? head1 : p2->next;
+    }
+
+    return p1; 
+}
+
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
+
+void printList(struct Node* head) {
+    while (head != NULL) {
+        printf("%d -> ", head->data);
+        head = head->next;
+    }
+    printf("NULL\n");
+}
+int main() {
+
+    struct Node* common = newNode(15);
+    common->next = newNode(30);
+
+    struct Node* head1 = newNode(10);
+    head1->next = common;
+
+    struct Node* head2 = newNode(3);
+    head2->next = newNode(6);
+    head2->next->next = newNode(9);
+    head2->next->next->next = common;
+
+    printf("List 1: ");
+    printList(head1);
+
+    printf("List 2: ");
+    printList(head2);
+
+    struct Node* intersection = getIntersectionNode(head1, head2);
+    if (intersection != NULL)
+        printf("Intersection Point: %d\n", intersection->data);
+    else
+        printf("No Intersection\n");
+
+    return 0;
+}
