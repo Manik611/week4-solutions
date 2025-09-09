@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* insertAtBeginning(struct Node* head, int key) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = key;
+
+    if (head == NULL) {
+ 
+        newNode->next = newNode;
+        head = newNode;
+        return head;
+    }
+
+    struct Node* temp = head;
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->next = head;
+    head = newNode;
+
+    return head;
+}
+
+void printList(struct Node* head) {
+    if (head == NULL) return;
+
+    struct Node* temp = head;
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+
+    printf("-> (head)\n");
+}
+
+struct Node* insertEnd(struct Node* head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+
+    if (head == NULL) {
+        newNode->next = newNode;
+        return newNode;
+    }
+
+    struct Node* temp = head;
+    while (temp->next != head) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    newNode->next = head;
+    return head;
+}
+int main() {
+    struct Node* head = NULL;
+
+    head = insertEnd(head, 1);
+    head = insertEnd(head, 7);
+    head = insertEnd(head, 8);
+    head = insertEnd(head, 10);
+
+    printf("Original CLL: ");
+    printList(head);
+
+    int key = 5;
+    head = insertAtBeginning(head, key);
+
+    printf("After inserting %d at beginning: ", key);
+    printList(head);
+
+    return 0;
+}
