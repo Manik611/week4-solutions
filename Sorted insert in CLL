@@ -1,0 +1,84 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+struct Node* sortedInsert(struct Node* head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+
+    if (head == NULL) {
+        newNode->next = newNode;
+        return newNode;
+    }
+
+    struct Node* curr = head;
+
+    if (data <= head->data) {
+ 
+        while (curr->next != head) {
+            curr = curr->next;
+        }
+        curr->next = newNode;
+        newNode->next = head;
+        head = newNode; 
+    }
+    else {
+        while (curr->next != head && curr->next->data < data) {
+            curr = curr->next;
+        }
+        newNode->next = curr->next;
+        curr->next = newNode;
+    }
+
+    return head;
+}
+
+void printList(struct Node* head) {
+    if (head == NULL) return;
+
+    struct Node* temp = head;
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("-> (head)\n");
+}
+struct Node* createCLL(int arr[], int n) {
+    struct Node* head = NULL;
+    struct Node* temp, *last;
+
+    for (int i = 0; i < n; i++) {
+        temp = (struct Node*)malloc(sizeof(struct Node));
+        temp->data = arr[i];
+        if (head == NULL) {
+            head = temp;
+            temp->next = head;
+            last = temp;
+        } else {
+            last->next = temp;
+            temp->next = head;
+            last = temp;
+        }
+    }
+    return head;
+}
+
+int main() {
+    int arr[] = {1, 2, 4};
+    struct Node* head = createCLL(arr, 3);
+
+    printf("Original CLL: ");
+    printList(head);
+
+    int data = 2;
+    head = sortedInsert(head, data);
+
+    printf("After inserting %d: ", data);
+    printList(head);
+
+    return 0;
+}
